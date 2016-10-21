@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.dao.MyMindDao">
+    <resultMap id="myMindMap" type="com.test.model.MyMind">
+        <result column="id" property="id"></result>
+        <result column="projectName" property="projectName"></result>
+        <result column="responsible" property="responsible"></result>
+        <result column="peopleDay" property="peopleDay"></result>
+        <result column="beginDate" property="beginDate"></result>
+        <result column="endDate" property="endDate"></result>
+        <result column="remarks" property="remarks"></result>
+        <result column="mindJson" property="mindJson"></result>
+        <result column="createby" property="createby"></result>
+        <result column="created" property="created"></result>
+        <result column="updated" property="updated"></result>
+        <result column="updateby" property="updateby"></result>
+
+    </resultMap>
+
+    <select id="listMyMind" parameterType="hashmap" resultMap="myMindMap">
+
+       SELECT id ,project_name projectName ,responsible ,people_day peopleDay ,
+        begin_date beginDate ,end_date endDate,remarks ,mind_json mindJson ,
+        created ,createby ,updated ,updateby
+      from mind
+      <where>
+          1=1
+          <if test="id != null and id !=''" >
+              and id =#{id}
+          </if>
+      </where>
+
+    </select>
+
+    <insert id="addMyMind" parameterType="com.test.model.MyMind" >
+       INSERT INTO mind (id ,project_name ,responsible ,people_day ,begin_Date ,end_Date ,remarks ,mind_json ,
+         created ,createby  )
+       VALUES(#{id}, #{projectName},#{responsible} ,#{peopleDay} ,#{beginDate} ,#{endDate} ,#{remarks} ,#{mindJson} ,
+          #{created} ,#{createby})
+
+    </insert>
+
+    <update id="updateMyMind" parameterType="com.test.model.MyMind" >
+
+        UPDATE mind
+        SET mind_json=#{mindJson} ,project_name=#{projectName} ,responsible=#{responsible} ,people_day=#{peopleDay},
+        begin_Date = #{beginDate} ,end_Date = #{endDate},remarks = #{remarks} ,updated = #{updated}
+        WHERE id=#{id}
+
+    </update>
+
+    <delete id="deleteMyMind" parameterType="com.test.model.MyMind" >
+        DELETE from mind WHERE id=#{id}
+    </delete>
+</mapper>

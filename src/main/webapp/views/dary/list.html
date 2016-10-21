@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>list</title>
+    <script type="text/javascript" src="../../js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="../../js/moment-with-locales.js"></script>
+    <script type="text/javascript" src="../../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../js/bootstrap-datetimepicker.min.js"></script>
+    <!-- 引入 Bootstrap -->
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css" />
+    <!--<link href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
+    <!--<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>-->
+    <!--<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+
+    <!-- HTML5 Shim 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
+    <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <script src="../../js/angular.min.js"></script>
+    <style>
+        .list,.list th ,.list td {
+            border: 1px solid grey;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+        .list tr:nth-child(odd) {
+            background-color: #f1f1f1;
+        }
+        .list tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+        .formtab ,.formtab tr,.formtab td{
+            border: none;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body ng-app="daryApp" ng-controller="daryCtrl">
+<div width="90%">
+    <div id="searchForm">
+        <ng-form name="searchform" >
+            <table class="formtab">
+                <tr>
+                    <td align="right">disId :</td>
+                    <td><input ng-model="dismapp.disId" ></td>
+                    <td align="right">disCode :</td>
+                    <td><input ng-model="dismapp.disCode"></td>
+                </tr>
+                <tr>
+                    <td align="right">disName :</td>
+                    <td><input ng-model="dismapp.disName"></td>
+                    <td align="right">state :</td>
+                    <td>
+                        <select ng-model="dismapp.state" >
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><button ng-click="search()" class="btn search">search</button></td>
+                    <td colspan="2" align="center"><button >clear</button></td>
+
+                </tr>
+            </table>
+        </ng-form>
+    </div>
+
+    <div align="left"  width="90%" >
+
+        <button  class="btn btn-primary btn-sm" ng-click = "showTab('new')">new</button>
+        <button  class="btn btn-primary btn-sm"  ng-click="showTab('update')" >update</button>
+        <button>delete</button>
+
+    </div>
+
+
+    <table width="90%" class="list">
+        <thead>
+            <tr>
+                <td>序号</td>
+                <td>ID</td>
+                <td>CODE</td>
+                <td>NAME</td>
+                <td>STATE</td>
+                <td>INSTALLDATE</td>
+                <td>REMARK</td>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr ng-repeat="dismapp in dismapps">
+                <td>{{$index+1}}</td>
+                <td>{{dismapp.disId}}</td>
+                <td>{{dismapp.disCode}}</td>
+                <td>{{dismapp.disName}}</td>
+                <td>{{dismapp.state}}</td>
+                <td>{{dismapp.installDate | date:'yyyy-MM-dd'}}</td>
+                <td>{{dismapp.remark}}</td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <ng-form  name="addForm" class="form-horizontal" role="form"  >
+                <div class="modal-header" style="padding: 10px">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <label>{{dis.tabTitle}}</label>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="disId" class="col-sm-2 control-label" style="padding-left: 0px;padding-right: 0px">分销商ID</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="col-sm-2 form-control" id="disId" ng-model="addDis.disId" placeholder="请输入分销商ID">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="disCode" class="col-sm-2 control-label" style="padding-left: 0px;padding-right: 0px">分销商编号</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="disCode" ng-model="addDis.disCode" placeholder="请输入分销商编号">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="disName" class="col-sm-2 control-label" style="padding-left: 0px;padding-right: 0px">分销商名称</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="disName" ng-model="addDis.disName" placeholder="请输入分销商名称">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="installDate" class="col-sm-2 control-label" style="padding-left: 0px;padding-right: 0px">安装日期</label>
+                        <div class="col-sm-5">
+                            <div class='input-group date' id='datetimepicker2'>
+                                <input type='text' id="installDate" ng-model="addDis.installDate" class="form-control" />
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            $(function () {
+                                $('#datetimepicker2').datetimepicker({
+                                    format: 'YYYY-MM-DD'
+                                });
+                            });
+                        </script>
+                    </div>
+                    <div class="form-group">
+                        <label for="remark" class="col-sm-2 control-label" style="padding-left: 0px;padding-right: 0px">备注信息</label>
+                        <div class="col-sm-5">
+                            <textarea class="form-control" rows="3" ng-model="addDis.remark" id="remark"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer" style="padding: 10px">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary btn-sm" ng-click="addDisRequest()">提交更改</button>
+                </div>
+            </ng-form>
+        </div>
+    </div>
+</div>
+
+
+    <script src="dary.js"></script>
+</body>
+</html>

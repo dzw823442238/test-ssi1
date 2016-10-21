@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.dao.DisMappingDao">
+    <resultMap id="disMapping" type="com.test.model.DisMapping">
+        <result column="disId" property="disId"></result>
+        <result column="disCode" property="disCode"></result>
+        <result column="disName" property="disName"></result>
+        <result column="state" property="state"></result>
+        <result column="installDate" property="installDate"></result>
+        <result column="remark" property="remark"></result>
+    </resultMap>
+
+    <select id="listDisMapping" parameterType="hashmap" resultMap="disMapping">
+
+        SELECT DISTRIBUTOR_ID disId,DISTRIBUTOR_CODE disCode,DISTRIBUTOR_NAME disName,
+        STATE state,INSTALLDATE installDate,REMARK remark
+         from dis_distributor_mapping
+         <where>
+             1=1
+             <if test="disId != null and disId != ''">
+                 and DISTRIBUTOR_ID = #{disId}
+             </if>
+             <if test="disCode !=null and disCode !=''">
+                  and DISTRIBUTOR_CODE = #{disCode}
+             </if>
+             <if test="disName !=null and disName !=''">
+                 and DISTRIBUTOR_NAME like concat('%', #{disName} ,'%')
+             </if>
+         </where>
+          limit 15
+
+    </select>
+
+    <insert id="insertDisMapping" parameterType="hashmap" >
+        INSERT INTO dis_distributor_mapping(DISTRIBUTOR_ID,DISTRIBUTOR_CODE,DISTRIBUTOR_NAME,STATE,INSTALLDATE,REMARK)
+        VALUES(#{disId} ,#{disCode} ,#{disName} ,#{state} ,#{installDate} ,#{remark})
+
+    </insert>
+
+    <update id="updateDisMapping" parameterType="hashmap" >
+
+        UPDATE dis_distributor_mapping
+        SET DISTRIBUTOR_NAME=#{disName} ,STATE=#{state} ,INSTALLDATE=#{installDate} ,REMARK=#{remark}
+        WHERE DISTRIBUTOR_ID=#{disId}
+
+    </update>
+
+    <delete id="deleteDisMapping" parameterType="hashmap" >
+        DELETE from dis_distributor_mapping WHERE DISTRIBUTOR_ID=#{disId}
+    </delete>
+</mapper>
